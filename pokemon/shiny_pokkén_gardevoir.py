@@ -8,20 +8,22 @@ import pyautogui
 m = PyMouse()
 k = PyKeyboard()
 
-def action(key: int | str, delay, time_held=.05):
-  print("Key Press:", key)
+# Global consts
+mute_key_press = True
+dialogBoxPixel = (235, 241, 255)
+normalGardevoirRed = (229, 31, 54) #(255, 104, 121)
+
+# Window consts (MUST ADJUST ON NEW LAYOUT)
+dialogBoxPos = (610, 314)
+normalGardevoirPos = (393, 80)
+
+def action(key: int | str, delay, time_held=.15):
+  if (not mute_key_press):
+    print("Key Press:", key)
   k.press_key(key)
   sleep(time_held)
   k.release_key(key)
   sleep(delay)
-
-# Color consts
-dialogBoxPixel = (235, 241, 255)
-normalGardevoirRed = (255, 104, 121)
-
-# Window consts (MUST ADJUST ON NEW LAYOUT)
-dialogBoxPos = (488, 232)
-normalGardevoirPos = (78, 180)
 
 def test_pixel(delay = 3):
   sleep(delay)
@@ -51,20 +53,19 @@ def hunt(max_iter = -1):
 
     currentDialogBoxPixel = (-1, -1, -1)
     while (currentDialogBoxPixel != dialogBoxPixel):
-      action(k.enter_key, .3)
+      action(k.enter_key, .3, time_held=.2)
+      sleep(.4)
       currentDialogBoxPixel = pyautogui.pixel(*dialogBoxPos)
 
+
     print('4) refuse nickname')
-    sleep(.2)
-    action(k.down_key, .2)
-    action(k.enter_key, .2)
+    sleep(.5)
+    action(k.down_key, .3)
+    action(k.enter_key, 1)
 
     print('5) open party')
-    action('x', .2)
-    action(k.down_key, .2)
-    action(k.enter_key, 1.5)
-    action(k.right_key, .2)
-    action(k.enter_key, .2)
+    action('x', .5, time_held=.3)
+    action(k.down_key, .2, time_held=.3)
     action(k.enter_key, 1.5)
 
     print('6) test shiny')
@@ -73,7 +74,10 @@ def hunt(max_iter = -1):
       print('SHINY?!')
       break
     print('Normal...')
+    
     iter += 1
+    print("ITERATIONS:", iter)
+    sleep(.5)
 
 hunt()
 # test_pixel() # Uncomment to find pixel positions
